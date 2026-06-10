@@ -1,0 +1,310 @@
+ text. Simple icon graphic.',
+    dimensions: '200×200px',
+    aspectRatio: '1:1',
+    priority: 'HIGH',
+    photoType: 'STOCK OK',
+    canLaunchWithout: true,
+    filename: 'badge-made-fresh.png',
+  },
+  {
+    id: 'badge-family-owned',
+    page: 'Home + About',
+    section: 'Trust Badges',
+    description: 'Family Owned badge — house/family icon, warm colors. Simple graphic.',
+    dimensions: '200×200px',
+    aspectRatio: '1:1',
+    priority: 'HIGH',
+    photoType: 'STOCK OK',
+    canLaunchWithout: true,
+    filename: 'badge-family-owned.png',
+  },
+
+  // ─── BACKGROUND TEXTURES ─────────────────────────────────────────────────────
+  {
+    id: 'texture-dark',
+    page: 'Home',
+    section: 'Late Night Section + Footer',
+    description: 'Subtle dark texture — could be charcoal grill texture, dark concrete, or dark geometric pattern. Tileable. Used as CSS background overlay.',
+    dimensions: '800×800px tileable',
+    aspectRatio: '1:1',
+    priority: 'NICE TO HAVE',
+    photoType: 'STOCK OK',
+    canLaunchWithout: true,
+    filename: 'texture-dark-bg.jpg',
+  },
+];
+
+const priorityColors: Record<Priority, string> = {
+  'MUST HAVE': 'bg-red-100 text-red-700 border border-red-200',
+  'HIGH': 'bg-orange-100 text-orange-700 border border-orange-200',
+  'NICE TO HAVE': 'bg-gray-100 text-gray-600 border border-gray-200',
+};
+
+const photoTypeColors: Record<PhotoType, string> = {
+  'REAL PHOTO': 'bg-purple-100 text-purple-700 border border-purple-200',
+  'STOCK OK': 'bg-blue-100 text-blue-700 border border-blue-200',
+};
+
+const allPages = ['All', ...Array.from(new Set(images.map(i => i.page)))];
+const allPriorities: Array<'All' | Priority> = ['All', 'MUST HAVE', 'HIGH', 'NICE TO HAVE'];
+
+export default function ImageGuide() {
+  const [filterPage, setFilterPage] = useState<string>('All');
+  const [filterPriority, setFilterPriority] = useState<string>('All');
+  const [filterType, setFilterType] = useState<string>('All');
+
+  const mustHaveCount = images.filter(i => i.priority === 'MUST HAVE').length;
+  const highCount = images.filter(i => i.priority === 'HIGH').length;
+  const nthCount = images.filter(i => i.priority === 'NICE TO HAVE').length;
+  const realPhotoCount = images.filter(i => i.photoType === 'REAL PHOTO').length;
+  const stockOkCount = images.filter(i => i.photoType === 'STOCK OK').length;
+
+  const filtered = images.filter(img => {
+    if (filterPage !== 'All' && img.page !== filterPage) return false;
+    if (filterPriority !== 'All' && img.priority !== filterPriority) return false;
+    if (filterType !== 'All' && img.photoType !== filterType) return false;
+    return true;
+  });
+
+  return (
+    <div className="min-h-screen bg-[#FFF7ED]">
+      {/* Header */}
+      <div className="bg-[#111827] pt-24 pb-12">
+        <div className="container">
+          <span className="inline-block bg-[#F97316] text-white text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">Internal Resource</span>
+          <h1 className="font-bebas text-5xl md:text-7xl text-white mb-4">COMPLETE IMAGE GUIDE</h1>
+          <p className="text-gray-300 text-lg max-w-3xl">
+            Every image needed to fully launch the Tasty Chicken Box website. Organized by page, section, priority, and whether it must be a real restaurant photo or can be sourced from stock.
+          </p>
+        </div>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container py-6">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="text-center">
+              <p className="font-bebas text-4xl text-[#111827]">{images.length}</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wide">Total Images</p>
+            </div>
+            <div className="text-center">
+              <p className="font-bebas text-4xl text-red-600">{mustHaveCount}</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wide">Must Have</p>
+            </div>
+            <div className="text-center">
+              <p className="font-bebas text-4xl text-orange-500">{highCount}</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wide">High Priority</p>
+            </div>
+            <div className="text-center">
+              <p className="font-bebas text-4xl text-purple-600">{realPhotoCount}</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wide">Real Photos Needed</p>
+            </div>
+            <div className="text-center">
+              <p className="font-bebas text-4xl text-blue-500">{stockOkCount}</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wide">Stock Photo OK</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Alert Banner */}
+      <div className="bg-red-50 border-b border-red-200">
+        <div className="container py-4">
+          <div className="flex items-start gap-3">
+            <span className="text-xl flex-shrink-0">🚨</span>
+            <div>
+              <p className="font-semibold text-red-800 text-sm">Cannot Launch Without These {mustHaveCount} Images</p>
+              <p className="text-red-700 text-xs mt-0.5">
+                Hero background, Hero card, 6 Best Seller cards, Sauce drizzle shot, Ibrahim cooking photo, Catering hero, Chicken/Lamb/Combo over rice, Mixed Grill, Lamb Chops, Chicken Shawarma Wrap, Lamb Gyro Wrap, Hot Black Tea, Halal badge, and 3 Gallery must-haves.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="bg-white border-b border-gray-200 sticky top-16 z-30">
+        <div className="container py-4">
+          <div className="flex flex-wrap gap-3 items-center">
+            <span className="text-gray-500 text-sm font-medium">Filter:</span>
+
+            {/* Priority filter */}
+            <div className="flex gap-1 flex-wrap">
+              {allPriorities.map(p => (
+                <button
+                  key={p}
+                  onClick={() => setFilterPriority(p)}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all border ${
+                    filterPriority === p
+                      ? 'bg-[#111827] text-white border-[#111827]'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
+            <span className="text-gray-300">|</span>
+
+            {/* Type filter */}
+            {(['All', 'REAL PHOTO', 'STOCK OK'] as const).map(t => (
+              <button
+                key={t}
+                onClick={() => setFilterType(t)}
+                className={`px-3 py-1 rounded-full text-xs font-semibold transition-all border ${
+                  filterType === t
+                    ? 'bg-[#111827] text-white border-[#111827]'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+
+            <span className="text-gray-300">|</span>
+
+            {/* Page filter */}
+            <div className="flex gap-1 flex-wrap">
+              {allPages.map(p => (
+                <button
+                  key={p}
+                  onClick={() => setFilterPage(p)}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all border ${
+                    filterPage === p
+                      ? 'bg-[#F97316] text-white border-[#F97316]'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
+            <span className="ml-auto text-gray-400 text-xs">{filtered.length} images shown</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Image List */}
+      <div className="container py-10">
+        <div className="space-y-4">
+          {filtered.map((img, idx) => (
+            <div
+              key={img.id}
+              className={`bg-white rounded-2xl border-l-4 shadow-sm overflow-hidden ${
+                !img.canLaunchWithout ? 'border-l-red-500' : img.priority === 'HIGH' ? 'border-l-orange-400' : 'border-l-gray-300'
+              }`}
+            >
+              <div className="p-5">
+                <div className="flex flex-col md:flex-row md:items-start gap-4">
+                  {/* Number */}
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#111827] flex items-center justify-center">
+                    <span className="text-white font-bebas text-lg">{idx + 1}</span>
+                  </div>
+
+                  {/* Main content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <h3 className="font-semibold text-[#111827] text-base">{img.section}</h3>
+                      <span className="text-gray-400 text-xs">·</span>
+                      <span className="text-gray-500 text-xs">{img.page}</span>
+                      {!img.canLaunchWithout && (
+                        <span className="bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">🚫 BLOCKS LAUNCH</span>
+                      )}
+                    </div>
+
+                    <p className="text-gray-700 text-sm leading-relaxed mb-3">{img.description}</p>
+
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      <span className={`text-xs font-semibold px-2 py-1 rounded-full ${priorityColors[img.priority]}`}>
+                        {img.priority}
+                      </span>
+                      <span className={`text-xs font-semibold px-2 py-1 rounded-full ${photoTypeColors[img.photoType]}`}>
+                        {img.photoType}
+                      </span>
+                      <span className="text-xs text-gray-400 border border-gray-200 px-2 py-1 rounded-full">
+                        📐 {img.dimensions}
+                      </span>
+                      <span className="text-xs text-gray-400 border border-gray-200 px-2 py-1 rounded-full">
+                        ⬜ {img.aspectRatio}
+                      </span>
+                    </div>
+
+                    <p className="text-gray-400 text-xs font-mono">→ Save as: <span className="text-[#F97316]">{img.filename}</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filtered.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-gray-400 text-lg">No images match your filters.</p>
+          </div>
+        )}
+
+        {/* Summary Section */}
+        <div className="mt-16 bg-[#111827] rounded-2xl p-8">
+          <h2 className="font-bebas text-3xl text-white mb-6">SHOOTING PRIORITY ORDER</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-red-900/40 rounded-xl p-5 border border-red-800">
+              <h3 className="text-red-400 font-bebas text-xl mb-3">🔴 SHOOT FIRST — DAY 1</h3>
+              <ul className="space-y-1 text-sm text-gray-300">
+                <li>• Hero combo platter (background + card)</li>
+                <li>• All 6 best seller dishes</li>
+                <li>• Sauce drizzle action shot</li>
+                <li>• Ibrahim at the grill (candid)</li>
+                <li>• Combo / Lamb / Chicken over rice</li>
+                <li>• Mixed Grill + Lamb Chops</li>
+                <li>• Hot Black Tea (dine-in)</li>
+                <li>• Catering spread (if upcoming event)</li>
+              </ul>
+            </div>
+            <div className="bg-orange-900/30 rounded-xl p-5 border border-orange-800">
+              <h3 className="text-orange-400 font-bebas text-xl mb-3">🟠 SHOOT SECOND — DAY 2</h3>
+              <ul className="space-y-1 text-sm text-gray-300">
+                <li>• All wrap photos (7 wraps)</li>
+                <li>• Remaining grill items</li>
+                <li>• Gallery strip photos (interior, exterior)</li>
+                <li>• Team photos (staff group)</li>
+                <li>• Falafel close-up</li>
+                <li>• Baklava + Kunafa desserts</li>
+                <li>• Family platter shots</li>
+                <li>• Shawarma spit slice shot</li>
+              </ul>
+            </div>
+            <div className="bg-gray-800 rounded-xl p-5 border border-gray-700">
+              <h3 className="text-gray-400 font-bebas text-xl mb-3">⚪ STOCK / DESIGN — ANYTIME</h3>
+              <ul className="space-y-1 text-sm text-gray-300">
+                <li>• Hummus (stock OK)</li>
+                <li>• Tabouleh (stock OK)</li>
+                <li>• House salad (stock OK)</li>
+                <li>• Mozzarella sticks (stock OK)</li>
+                <li>• Grape leaves (stock OK)</li>
+                <li>• Rice pudding (stock OK)</li>
+                <li>• Soft drinks / Water (stock OK)</li>
+                <li>• Halal badge (design / stock)</li>
+                <li>• Dark background texture (stock)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 bg-white/10 rounded-xl">
+            <p className="text-white font-semibold text-sm mb-1">📸 Photography Tips</p>
+            <ul className="text-gray-300 text-xs space-y-1">
+              <li>• Dark surfaces (slate, dark wood, charcoal board) make the food pop — match the site's dark aesthetic</li>
+              <li>• Shoot from overhead (flat lay) OR 45° angle — both work, avoid straight-on eye level for platters</li>
+              <li>• Always have both sauces present when shooting rice platters — drizzle them dramatically before shooting</li>
+              <li>• Shoot during actual service hours for the most realistic and delicious-looking steam and freshness</li>
+              <li>• For Ibrahim photos: candid is better than posed. Catch him in action.</li>
+              <li>• Use natural light if possible, or a ring light / soft box — avoid harsh shadows</li>
+              <li>• Shoot in RAW if available, minimum 12MP — you'll need to crop for multiple aspect ratios</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
